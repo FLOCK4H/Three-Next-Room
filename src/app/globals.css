@@ -64,6 +64,15 @@ a {
   touch-action: pan-y !important;
 }
 
+/* iOS Safari target */
+@supports (-webkit-touch-callout: none) {
+  .ui-surface {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(0,0,0,.75) !important;
+  }
+}
+
 /* Make the scroll container a separate composited layer for iOS momentum scroll */
 .ui-scroll {
   -webkit-overflow-scrolling: touch;

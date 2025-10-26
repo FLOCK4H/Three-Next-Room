@@ -380,10 +380,8 @@ export default function InteractiveScreens({
                 {cryptoRepos && cryptoRepos.map((r) => (
                   <div key={r.id} style={repoRow}>
                     <img
-                      src={r.og}
+                      src={`/api/og?url=${encodeURIComponent(r.og)}`}
                       alt=""
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
                       style={thumbImg}
                     />
                     <div style={textCol}>
@@ -457,12 +455,10 @@ export default function InteractiveScreens({
             {hackRepos && hackRepos.map((r) => (
               <div key={r.id} style={repoRow}>
                   <img
-                    src={r.og}
-                    alt=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    style={thumbImg}
-                  />
+                  src={`/api/og?url=${encodeURIComponent(r.og)}`}
+                  alt=""
+                  style={thumbImg}
+                />
                   <div style={textCol}>
                     <a
                       href={r.html_url}
