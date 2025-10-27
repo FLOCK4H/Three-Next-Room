@@ -10,7 +10,7 @@ import InteractiveScreens from "./interactive/screens";
 import { RectAreaLightUniformsLib } from "three-stdlib";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { DEFAULT_CAMERA_POSITION, DEFAULT_CAMERA_TARGET } from "@/app/common/shared";
-
+import CenterNotifee from "./ui/CenterNotifee";
 type ViewMode = "preview" | "render";
 
 function PreviewLighting() {
@@ -83,6 +83,7 @@ function RenderLighting() {
 
 export default function SceneCanvas() {
   const [mode, setMode] = useState<ViewMode>("preview");
+  const [accepted, setAccepted] = useState(false);
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
   useEffect(() => {
@@ -90,19 +91,11 @@ export default function SceneCanvas() {
     if (!c) return;
     c.target.copy(new THREE.Vector3().fromArray(DEFAULT_CAMERA_TARGET));
     c.update();
-    c.saveState?.(); // <-- required so reset() knows where to go back to
+    c.saveState?.();
   }, []);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        width: "100vw",
-        height: "100dvh",
-        background: "transparent"
-      }}
-    >
+    <div style={{ position: "fixed", inset: 0, width: "100vw", height: "100dvh", background: "transparent" }}>
       <Canvas
         shadows={{ type: THREE.PCFSoftShadowMap }}
         gl={{
@@ -110,18 +103,14 @@ export default function SceneCanvas() {
           antialias: true,
           outputColorSpace: THREE.SRGBColorSpace,
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: mode === "render" ? 1.0 : 1.0,
+          toneMappingExposure: 1,
         }}
         dpr={[1, 1.75]}
         camera={{ fov: 50 }}
         style={{ background: "transparent" }}
       >
         <Suspense fallback={null}>
-        {mode === "preview"
-            ? <PreviewLighting key="preview" />
-            : <RenderLighting key="render" />
-          }
-
+          {mode === "preview" ? <PreviewLighting key="preview" /> : <RenderLighting key="render" />}
           <Room />
           <InteractiveScreens />
         </Suspense>
@@ -129,6 +118,7 @@ export default function SceneCanvas() {
         <OrbitControls
           ref={controlsRef}
           makeDefault
+          enabled={accepted}    // locked until Accept
           enableDamping
           enablePan={false}
           minPolarAngle={0.85}
@@ -137,25 +127,21 @@ export default function SceneCanvas() {
           maxAzimuthAngle={1.0}
           minDistance={0.8}
           maxDistance={4.0}
-          />
-          
+        />
       </Canvas>
 
       {/* Top-right toggle */}
       <div style={toggleWrap}>
-        <button
-          onClick={() => setMode("preview")}
-          style={{ ...toggleBtn, ...(mode === "preview" ? activeBtn : {}) }}
-        >
+        <button onClick={() => setMode("preview")} style={{ ...toggleBtn, ...(mode === "preview" ? activeBtn : {}) }}>
           Material
         </button>
-        <button
-          onClick={() => setMode("render")}
-          style={{ ...toggleBtn, ...(mode === "render" ? activeBtn : {}) }}
-        >
+        <button onClick={() => setMode("render")} style={{ ...toggleBtn, ...(mode === "render" ? activeBtn : {}) }}>
           Render
         </button>
       </div>
+
+      {/* Centered, medium-sized, doesn’t drift */}
+      <CenterNotifee hidden={accepted} onAccept={() => setAccepted(true)} />
 
       <CanvasLoaderOverlay />
     </div>
