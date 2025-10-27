@@ -1,5 +1,5 @@
 "use client";
-
+// boooo
 import { Html, useCursor, useGLTF, useTexture } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef, useState } from "react";
