@@ -1,25 +1,78 @@
 "use client";
 import { useState } from "react";
 
-type Props = { hidden?: boolean; onAccept: () => void };
+type NotifyType = "info" | "success" | "warning" | "error";
+type Props = {
+  hidden?: boolean;
+  onAccept: () => void;
+  notifyType?: NotifyType;
+  shown?: boolean;
+};
 
-export default function CenterNotifee({ hidden, onAccept }: Props) {
+export default function CenterNotifee({
+  hidden,
+  onAccept,
+  notifyType = "info",
+  shown = true,
+}: Props) {
   const [hover, setHover] = useState(false);
-  if (hidden) return null;
+  if (hidden || !shown) return null;
+
+  const getTitle = () => {
+    switch (notifyType) {
+      case "success":
+        return "Success";
+      case "warning":
+        return "Notice";
+      case "error":
+        return "Error";
+      default:
+        return "Welcome";
+    }
+  };
+
+  const getBody = () => {
+    switch (notifyType) {
+      case "success":
+        return (
+          <>
+            Your action was successful. Click <b>Accept</b> to continue.
+          </>
+        );
+      case "warning":
+        return (
+          <>
+            Please be aware of potential issues. Click <b>Accept</b> to continue.
+          </>
+        );
+      case "error":
+        return (
+          <>
+            There was a problem processing your action. Click <b>Accept</b> to try again.
+          </>
+        );
+      default:
+        return (
+          <>
+            You can interact with both screens. Click <b>Accept</b> to continue.
+          </>
+        );
+    }
+  };
 
   return (
     <div style={overlay}>
-      <div style={card} role="dialog" aria-modal="true" aria-label="Welcome">
-        <div style={title}>Welcome</div>
-        <p style={body}>
-          You can interact with both screens. Click <b>Accept</b> to continue.
-        </p>
+      <div style={card} role="dialog" aria-modal="true" aria-label={getTitle()}>
+        <div style={title}>{getTitle()}</div>
+        <p style={body}>{getBody()}</p>
         <button
           style={{
             ...btn,
             background: hover ? "rgba(255,255,255,0.9)" : "transparent",
             color: hover ? "#000" : "#fff",
-            borderColor: hover ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.35)",
+            borderColor: hover
+              ? "rgba(255,255,255,0.6)"
+              : "rgba(255,255,255,0.35)",
           }}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}

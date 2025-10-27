@@ -313,22 +313,24 @@ export default function InteractiveScreens({
 
   return (
     <>
-      {left && (
-        <HitPlane
-          target={left}
-          tweak={TWEAKS["ScreenLeft"]}
-          onHover={(v) => setHovered(v ? "left" : null)}
-          onClick={() => setActive("left")}
-        />
-      )}
-      {right && (
-        <HitPlane
-          target={right}
-          tweak={TWEAKS["ScreenRight"]}
-          onHover={(v) => setHovered(v ? "right" : null)}
-          onClick={() => setActive("right")}
-        />
-      )}
+    {left && (
+      <HitPlane
+        target={left}
+        tweak={TWEAKS["ScreenLeft"]}
+        onHover={(v) => setHovered(v ? "left" : null)}
+        onClick={() => setActive("left")}
+        disabled={active === "left"}          // NEW
+      />
+    )}
+    {right && (
+      <HitPlane
+        target={right}
+        tweak={TWEAKS["ScreenRight"]}
+        onHover={(v) => setHovered(v ? "right" : null)}
+        onClick={() => setActive("right")}
+        disabled={active === "right"}         // NEW
+      />
+    )}
 
       {/* Left screen HTML */}
       {active === "left" && leftBasis && (
