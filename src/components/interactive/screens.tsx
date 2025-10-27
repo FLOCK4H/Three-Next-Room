@@ -504,6 +504,9 @@ const panelBody: React.CSSProperties = {
   WebkitOverflowScrolling: "touch",
   touchAction: "pan-y",
   overscrollBehavior: "contain",
+  display: "flex",
+  flexDirection: "column",
+  gap: 12,
 };
 
 const repoRow: React.CSSProperties = {
@@ -514,6 +517,8 @@ const repoRow: React.CSSProperties = {
   fontSize: 14,
   touchAction: "pan-y",
   cursor: "default",
+  border: "1px solid rgba(255,255,255,.12)",
+  borderRadius: 8,
 };
 
 const thumbImg: React.CSSProperties = {

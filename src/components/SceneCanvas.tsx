@@ -140,8 +140,8 @@ export default function SceneCanvas() {
         </button>
       </div>
 
-      {/* Centered, medium-sized, doesn’t drift */}
-      <CenterNotifee hidden={accepted} onAccept={() => setAccepted(true)} />
+        {/* Centered, medium-sized, doesn’t drift */}
+        <CenterNotifee hidden={accepted} onAccept={() => setAccepted(true)} notifyType="info" shown={true} />
 
       <CanvasLoaderOverlay />
     </div>
